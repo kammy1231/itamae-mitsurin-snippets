@@ -48,8 +48,14 @@ let g:neosnippet#snippets_directory = [
 open itamae-mitsurin files and set filetype `ruby.itamae`
 
 ``` vim
-:set ft=ruby.itamae-mitsurin
+:set ft=ruby.itamae
 ```
+
+### Sample command definition in .vimrc
+```vim
+command! ITA set filetype=ruby.serverspec
+```
+
 
 ## License
 
