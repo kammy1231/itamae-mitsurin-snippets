@@ -1,6 +1,6 @@
-# itamae-snippets
+# itamae-mitsurin-snippets
 
-This is vim snippets for [Itamae](http://itamae.kitchen/) inspired by [serverspec-snippets](https://github.com/glidenote/serverspec-snippets).
+This is vim snippets for [itamae-mitsurin](https://rubygems.org/gems/itamae-mitsurin) inspired by [serverspec-snippets](https://github.com/hfm/itamae-snippets).
 
 ## Requirement
 
@@ -11,10 +11,10 @@ This is vim snippets for [Itamae](http://itamae.kitchen/) inspired by [serverspe
 ### Vundle
 
 1. Setup the [vundle](https://github.com/gmarik/vundle) package manager
-2. Set the bundles for [itamae-snippets](https://github.com/tacahilo/itamae-snippets)
+2. Set the bundles for [itamae-mitsurin-snippets](https://github.com/kammy1231/itamae-snippets)
 
 ``` vim
-Bundle 'tacahilo/itamae-snippets'
+Bundle 'kammy1231/itamae-mitsurin-snippets'
 ```
 
 3. Open up Vim and start installation with `:BundleInstall`
@@ -22,33 +22,33 @@ Bundle 'tacahilo/itamae-snippets'
 ### Neobundle
 
 1. Setup the [neobundle](https://github.com/Shougo/neobundle.vim) package manager
-2. Set the bundles for [itamae-snippets](https://github.com/tacahilo/itamae-snippets)
+2. Set the bundles for [itamae-mitsurin-snippets](https://github.com/kammy1231/itamae-snippets)
 
 ``` vim
-NeoBundle 'tacahilo/itamae-snippets'
+NeoBundle 'kammy1231/itamae-mitsurin-snippets'
 ```
 
 3. Open up Vim and start installation with `:NeoBundleInstall`
 
 ## Setup
 
-Set itamae-snippets directory(`~/.vim/bundle/itamae-snippets`) in your .vimrc.
+Set itamae-mitsurin-snippets directory(`~/.vim/bundle/itamae-snippets`) in your .vimrc.
 
 
-``` vim 
+``` vim
 " setting example
 let g:neosnippet#snippets_directory = [
       \'~/.vim/snippets',
-      \'~/.vim/bundle/itamae-snippets',
+      \'~/.vim/bundle/itamae-mitsurin-snippets',
       \]
 ```
 
 ### Usage
 
-open Itamae files and set filetype `ruby.itamae`
+open itamae-mitsurin files and set filetype `ruby.itamae`
 
 ``` vim
-:set ft=ruby.itamae
+:set ft=ruby.itamae-mitsurin
 ```
 
 ## License

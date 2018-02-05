@@ -1,20 +1,39 @@
 # Itamae:
 #   https://github.com/itamae-kitchen/itamae/wiki
 
+# node_attributes
+snippet node_attributes
+    {
+      "run_list": [
+      ],
+      "environments": {
+        "set": "${1:set_name}",
+        "hostname": "${2:hostname}"
+      }
+    }
+
 # https://github.com/itamae-kitchen/itamae/wiki/Definitions
 snippet define_feature
-    define :${1:define_name} do
+    define :${1:define_name}, key: nil do
       ${3:resource} params[:name] do
-        ${4:attributes}
+        ${4:attributes} paramas[:key]
       end
     end
 
 # notifies
-snippet notifies
-    notifies :${1:action}, "${2:resource}"
-
 snippet notifies_immediately
     notifies :${1:action}, "${2:resource}", :immediately
+
+snippet notifies_delayed
+    notifies :${1:action}, "${2:resource}", :delayed
+
+# subscribes
+snippet subscribes_immediately
+    subscribes :${1:action}, "${2:resource}", :immediately
+
+snippet subscribes_delayed
+    subscribes :${1:action}, "${2:resource}", :delayed
+
 
 # Including Recipes https://github.com/itamae-kitchen/itamae/wiki/Including-Recipes
 snippet include_recipe
@@ -38,8 +57,8 @@ snippet directory
     directory "${1:/path/to/directory}"
 
 snippet directory_do
-    directory "${1:/path/to/directory}" do
-      mode  "${2:0644}"
+    directory "${1:name or path}" do
+      mode  "${2:644}"
       owner "${3:root}"
       group "${4:root}"
     end
@@ -49,8 +68,8 @@ snippet execute
     execute "${1:command}"
 
 snippet execute_do
-    execute "${1:name}" do
-      command "${2:$1}"
+    execute "${1:name or command}" do
+      command "${2:command}"
       cwd     "${3:/path/to/dir}"
     end
 
@@ -59,60 +78,77 @@ snippet file
     file "${1:/path/to/file}"
 
 snippet file_do
-    file "${1:/path/to/file}" do
-      mode  "${2:0644}"
-      owner "${3:root}"
-      group "${4:root}"
+    file "${1:name or path}" do
+      path  "${2:/path/to/dir}"
+      mode  "${3:644}"
+      owner "${4:root}"
+      group "${5:root}"
     end
 
 snippet file_content
-    file "${1:/path/to/file}" do
+    file "${1:name or path}" do
       content "${2:content}"
-      mode   "${3:0644}"
+      mode    "${3:644}"
+      owner   "${4:root}"
+      group   "${5:root}"
+    end
+
+snippet file_edit
+    file "${1:name or path}" do
+      action :edit
+      path   "${2:/path/to/dir}"
+      mode   "${3:644}"
       owner  "${4:root}"
       group  "${5:root}"
     end
 
-snippet file_content_with_notifies
-    file "${1:/path/to/file}" do
-      content "${2:content}"
-      notifies :${3:action}, "${4:file[/path/to/never_exist]}"
-    end
-
 # https://github.com/ryotarai/itamae/wiki/gem_package-resource
 snippet gem_package
-    gem_package "${1:gem}"
+    gem_package "${1:package_name}"
 
 snippet gem_package_do
-    gem_package "${1:gem}" do
+    gem_package "${1:name or package_name}" do
       version "${2:version}"
+      options ['--no-ri', '--no-rdoc']
     end
 
 # https://github.com/ryotarai/itamae/wiki/git-resource
 snippet git
-    git "${1:/path/to/directory}" do
-      repository "${2:repository}"
+    git "${1:name or destination}" do
+      repository "${2:https//github.com/kammy1231/itamae-mitsurin-snippets.git}"
     end
 
 snippet git_with_revision
-    git "${1:/path/to/directory}" do
-      repository "${2:repository}"
-      revision   "${3:revision}"
+    git "${1:name or destination}" do
+      repository "${2:https//github.com/kammy1231/itamae-mitsurin-snippets.git}"
+      revision   "${3:v0.1.0}"
+    end
+
+snippet git_with_depth
+    git "${1:name or destination}" do
+      repository "${2:https//github.com/kammy1231/itamae-mitsurin-snippets.git}"
+      depth ${3:1}
     end
 
 # https://github.com/itamae-kitchen/itamae/wiki/group-resource
 snippet group
-    group "${1:group}"
+    group "${1:groupname}"
 
 snippet group_do
-    group "${1:group}" do
+    group "${1:name or groupname}" do
       gid ${2:gid}
     end
 
 # https://github.com/ryotarai/itamae/wiki/link-resource
 snippet link
-    link "${1:/path/to/target}" do
-      to "${2:/path/to/file}"
+    link "${1:name or link}" do
+      to "${2:/path/to/source}"
+    end
+
+snippet link_force
+    link "${1:name or link}" do
+      to "${2:/path/to/source}"
+      force true
     end
 
 # https://github.com/itamae-kitchen/itamae/wiki/local_ruby_block-resource
@@ -128,16 +164,16 @@ snippet package
     package "${1:package}"
 
 snippet package_do
-    package "${1:package}" do
-      version ":${2:version}"
-      options ":${2:options}"
+    package "${1:name or package}" do
+      version ":${2:1.0.0}"
+      options ":${2:--downloadonly}"
     end
 
 # https://github.com/itamae-kitchen/itamae/wiki/remote_directory-resource
 snippet remote_file
-    remote_file "${1:/path/to/file}" do
+    remote_file "${1:name or path}" do
       source "${2:/path/to/source}"
-      mode   "${3:0644}"
+      mode   "${3:644}"
       owner  "${4:root}"
       group  "${5:root}"
     end
@@ -149,24 +185,24 @@ snippet service
     end
 
 snippet service_with_provider
-    service "${1:service}" do
+    service "${1:name or service}" do
       action [:${2:enable}, :${3:start}]
       provider "${4:provider}"
     end
 
 # https://github.com/itamae-kitchen/itamae/wiki/template-resource
 snippet template
-    template "${1:/path/to/file}" do
+    template "${1:name or path}" do
       source "${2:/path/to/source}"
-      variables(${3:key}: "${4:value}")
-      mode   "${3:0644}"
+      mode   "${3:644}"
       owner  "${4:root}"
       group  "${5:root}"
+      variables(${3:key}: ${4:value})
     end
 
 # https://github.com/itamae-kitchen/itamae/wiki/user-resource
 snippet user_resource
-    user "${1:name}" do
+    user "${1:name or username}" do
       uid         ${2:uid}
       gid         ${3:gid}
       create_home ${4:true}
@@ -174,7 +210,7 @@ snippet user_resource
     end
 
 snippet user_resource_full
-    user "${1:name}" do
+    user "${1:name or username}" do
       uid         ${2:uid}
       gid         ${3:gid}
       system_user ${4:true}
@@ -184,18 +220,48 @@ snippet user_resource_full
       password    "${8:password}"
     end
 
-###
-
-snippet user_and group
-    group "${1:group}" do
-      gid ${2:gid}
+snippet http_request
+    http_request "${1:name or path}" do
+      user  "${2:root}"
+      mode  "${3:644}"
+      owner "${4:root}"
+      group "${5:root}"
+      url   "${6:https://httpbin.org/get?from=Itamae}"
     end
 
-    user "${3:$1}" do
-      uid         ${4:$2}
-      gid         ${5:$2}
-      system_user ${6:true}
-      create_home ${7:true}
-      home        "/home/${6:$3}"
-      shell       "${7:/bin/bash}"
+snippet http_request_with_headers
+    http_request "${1:name or path}" do
+      user    "${2:root}"
+      mode    "${3:644}"
+      owner   "${4:root}"
+      group   "${5:root}"
+      url     "${6:https://httpbin.org/get?from=Itamae}"
+      headers "${7:UserAgent}" => "${8:Itamae}"
+    end
+
+# specinfra backend run_command
+snippet run_command
+    resp = run_command("${1:command}", error: false)
+    # resp methods: failure?, success?, stdout, stderr, exit_status
+
+# aws resources
+snippet aws_route53_rrset
+    aws_route53_rrset "${1:record_name}" do
+      region         "${2:ap-northeast-1}"
+      hosted_zone_id "${3:HOSTEDZONEID1}"
+      type           "${4:A}"
+      ttl            ${5:900}
+      value          "${6:192.168.1.1}"
+    end
+
+snippet aws_route53_rrset_full
+    aws_route53_rrset "${1:record_name}" do
+      region                     "${2:ap-northeast-1}"
+      hosted_zone_id             "${3:HOSTEDZONEID1}"
+      type                       "${4:A}"
+      ttl                        ${5:900}
+      value                      "${6:192.168.1.1}"
+      failover                   "${7:PRIMARY or SECONDARY}"
+      health_check_id            "${8:health_check_id}"
+      traffic_policy_instance_id "${9:traffic_policy_instance_id}"
     end
