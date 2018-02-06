@@ -53,7 +53,7 @@ open itamae-mitsurin files and set filetype `ruby.itamae`
 
 ### Sample command definition in .vimrc
 ```vim
-command! ITA set filetype=ruby.serverspec
+command! IT set filetype=ruby.itamae
 ```
 
 
